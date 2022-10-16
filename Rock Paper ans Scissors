@@ -1,0 +1,76 @@
+import random
+
+drawing = {
+    'cut': """    
+                   OO
+                   /\  """,
+
+    'paper': """ 
+                   ___
+                  |   |
+                  |___|
+                 
+    """,
+
+    'rock': """    
+                      []
+                     
+                    
+                   
+                     
+                     
+                          
+    """
+}
+
+
+def check_win(computer_choice, player_choice):
+    if computer_choice == 'cut' and player_choice == 'rock':
+        return "player"
+
+    if computer_choice == 'rock' and player_choice == 'paper':
+        return "player"
+
+    if computer_choice == 'paper' and player_choice == 'cut':
+        return "player"
+
+    if computer_choice == 'paper' and player_choice == 'rock':
+        return "computer"
+
+    if computer_choice == 'rock' and player_choice == 'cut':
+        return "computer"
+
+    if computer_choice == 'cut' and player_choice == 'paper':
+        return "computer"
+
+
+def print_choice(choice, comp_choice):
+    print(f" your choice: {drawing[choice]}\n computer choice:{drawing[comp_choice]}")
+
+
+def main():
+    num_of_winners_c = 0
+    num_of_winners_p = 0
+    while num_of_winners_p < 3 and num_of_winners_c < 3:
+        choices = ['cut', 'paper', 'rock']
+        computer_choice = random.choice(choices)
+        player_choice = input("Enter your choice: 'cut', 'paper', 'rock' \n")
+        print_choice(player_choice, computer_choice)
+
+        if check_win(computer_choice, player_choice) == "player":
+            num_of_winners_p = num_of_winners_p + 1
+            print(num_of_winners_p, ':', num_of_winners_c, "  you win!")
+        if check_win(computer_choice, player_choice) == "computer":
+            num_of_winners_c = num_of_winners_c + 1
+            print(num_of_winners_p, ':', num_of_winners_c, "  The computer win!")
+        if computer_choice == player_choice:
+            print("oooo, play again \n")
+
+    if num_of_winners_p == 3:
+        print("hoo ya! you win!!")
+    else:
+        print("Mmm you lost :(")
+
+
+if __name__ == "__main__":
+    main()
