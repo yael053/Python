@@ -1,0 +1,78 @@
+import random
+from prettytable import PrettyTable
+import csv
+from datetime import datetime
+
+LEADERBOARD_PATH = "C:\\Users\\97253\\PycharmProjects\\leetCode\\leaderboard.csv"
+LEADERBOARD_FIELDS = ['Name', 'Guesses', 'Time']
+
+
+def read_leaderboard(leaderboard_path):
+    with open(leaderboard_path, "r") as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')  # read the file and make every line into a list
+        return [line for line in csv_reader if
+                line]  # 2.for every line in the file  3. if its not empty line  1. enter into the board
+
+
+def load_leaderboard(leaderboard_path):
+    leaderboard_lines = read_leaderboard(leaderboard_path)
+    # create object of PrettyTable - it's a board, and we enter the titles.
+    leaderboard = PrettyTable(LEADERBOARD_FIELDS)
+    for row in leaderboard_lines:  # now for every line in the file
+        leaderboard.add_row(row)  # we put her in the PrettyTable - our board
+    return leaderboard  # return full board with all the information.
+
+
+def save_leaderboard_entry(leaderboard_path, row):
+    # print(leaderboard_lines)
+    with open(leaderboard_path, 'a') as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(row)
+
+
+def main():
+    leaderboard = load_leaderboard(LEADERBOARD_PATH)
+
+    computer_number = random.randint(0, 100)
+    start_time = datetime.now()
+    choice = int(input("choose a number "))
+    num_of_guesses = 1
+    while computer_number != choice:
+
+        if computer_number > choice:
+            if computer_number - choice < 10:
+                print("you're so clossee!, just a little bit bigger")
+            else:
+                print("choose bigger number")
+
+        if computer_number < choice:
+            if choice - computer_number < 10:
+                print("you're so clossee!, just a little bit smaller")
+            else:
+                print("choose smaller number")
+
+        choice = int(input("choose a number "))
+        num_of_guesses = num_of_guesses + 1
+
+    if num_of_guesses in range(0, 6):
+        print("correct! wow!! what a luck")
+    elif num_of_guesses in range(6, 10):
+        print("well done!")
+    else:
+        print("come on, please be better next time")
+
+    end_time = datetime.now()
+
+    total_time = end_time - start_time
+    total_time_sec = str(total_time.seconds)
+    total_time_micro = str(total_time.microseconds)[:2]
+    total_time = float(f"{total_time_sec}.{total_time_micro}")
+
+    name = input("let's enter your name to the board: ")
+    leaderboard.add_row([name, num_of_guesses, total_time])
+    save_leaderboard_entry(LEADERBOARD_PATH, [name, num_of_guesses, total_time])
+    print(leaderboard)
+
+
+if __name__ == "__main__":
+    main()
